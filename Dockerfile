@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
 # Install Git LFS from the official source
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
     apt-get install -y git-lfs && \
-    git lfs install
+    git lfs install --skip-repo
 
 # Get model
 RUN mkdir -p models/codebert && \
