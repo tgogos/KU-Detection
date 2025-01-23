@@ -1,5 +1,7 @@
 # Requirments
 
+Based on https://github.com/ElisavetKanidou/KU-Detection-Back-End
+
 First you have to download the model from [here](https://huggingface.co/nnikolaidis/java-ku/tree/main). And add it in models/codebert
 
 
