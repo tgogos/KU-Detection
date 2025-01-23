@@ -1,0 +1,38 @@
+version: "2.2"
+services:
+  ku-detection-backend:
+    image: ${DOCKER_REG}${DOCKER_REPO}${APP_NAME}:${DOCKER_TAG}
+    build:
+      context: .
+    container_name: ku-detection-backend
+    depends_on:
+      - ku-detection-db
+    environment:
+      - DB_HOST=ku-detection-db
+      - DB_PORT=5432
+      - DB_NAME=test
+      - DB_USER=root
+      - DB_PASSWORD=root
+    ports:
+      - '5000:5000'
+    labels:
+      io.portainer.accesscontrol.teams: skillab-all
+
+  ku-detection-db:
+    image: postgres:16.2
+    container_name: ku-detection-db
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: test
+    volumes:
+      - ku_detection_postgresql:/var/lib/postgresql
+      - ku_detection_postgresql_data:/var/lib/postgresql/data
+    ports:
+      - '5430:5432'
+    labels:
+      io.portainer.accesscontrol.teams: skillab-all
+
+volumes:
+  ku_detection_postgresql:
+  ku_detection_postgresql_data:

@@ -1,0 +1,7 @@
+.idea
+venv/
+run.py
+__pycache__/
+cloned_repos/
+temp
+output
