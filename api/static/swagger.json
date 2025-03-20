@@ -1,0 +1,702 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "KU-Detection-Back-End API",
+    "version": "1.0.0",
+    "description": "API for the KU-Detection-Back-End project."
+  },
+  "paths": {
+    "/commits": {
+      "post": {
+        "summary": "Get Commits",
+        "description": "Retrieves a list of commits from a specified repository.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "repo_url": {
+                    "type": "string",
+                    "description": "URL of the repository",
+                    "example": "https://github.com/user/repo.git"
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "description": "Maximum number of commits to retrieve",
+                    "example": 50
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "author": {
+                        "type": "string",
+                        "description": "Author of the commit"
+                      },
+                      "message": {
+                        "type": "string",
+                        "description": "Commit message"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          }
+        }
+      }
+    },
+    "/repos": {
+      "post": {
+        "summary": "Create Repository",
+        "description": "Creates a new repository entry.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "repo_name": {
+                    "type": "string",
+                    "description": "Name of the repository",
+                    "example": "my-repo"
+                  },
+                  "url": {
+                    "type": "string",
+                    "description": "URL of the repository",
+                    "example": "https://github.com/user/my-repo.git"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the repository",
+                    "example": "My cool project"
+                  },
+                  "comments": {
+                    "type": "string",
+                    "description": "Comments about the repository",
+                    "example": "This repository is for..."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Repository created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Success message",
+                      "example": "Repository created successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "Database connection failed"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get":{
+          "summary": "List Repositories",
+          "description": "Lists all repository entries",
+            "responses": {
+                "200":{
+                    "description": "Successsful Operation",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                    "properties": {
+                                        "repo_name": {
+                                            "type": "string",
+                                            "description": "Name of repository"
+                                        },
+                                        "url": {
+                                            "type": "string",
+                                            "description": "Repository URL"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "Internal server error",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "error": {
+                                        "type": "string",
+                                        "description": "Error message",
+                                        "example": "Database connection failed"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+      }
+    },
+    "/detected_kus": {
+      "get": {
+        "summary": "Get Detected KUs",
+        "description": "Retrieves detected KUs.",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "ku_id": {
+                        "type": "integer",
+                        "description": "KU ID",
+                        "example": 1
+                      },
+                      "ku_name": {
+                        "type": "string",
+                        "description": "KU Name",
+                        "example": "Knowledge Unit 1"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "Database query failed"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repos/{repo_name}": {
+      "put": {
+        "summary": "Edit Repository",
+        "description": "Edits an existing repository entry.",
+        "parameters": [
+          {
+            "name": "repo_name",
+            "in": "path",
+            "required": true,
+            "description": "Name of the repository to edit",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "description": "URL of the repository",
+                    "example": "https://github.com/user/my-repo.git"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the repository",
+                    "example": "My updated cool project"
+                  },
+                  "comments": {
+                    "type": "string",
+                    "description": "Comments about the repository",
+                    "example": "These are the updated comments"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Repository updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Success message",
+                      "example": "Repository updated successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "Database update failed"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+        "/timestamps": {
+            "get":{
+                "summary": "Get Commits Timestamps",
+                "description": "Retrieve commits timestampts.",
+                "parameters": [
+                    {
+                        "name": "repo_name",
+                        "in": "query",
+                        "required": true,
+                        "description": "Name of the repository to edit",
+                        "schema": {
+                          "type": "string"
+                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                         "content": {
+                             "application/json":{
+                                 "schema": {
+                                     "type": "array",
+                                     "items": {
+                                         "type": "object",
+                                          "properties": {
+                                             "sha": {
+                                                 "type": "string",
+                                                 "description": "Sha of the commit"
+                                             },
+                                             "timestamp": {
+                                                "type": "string",
+                                                "description": "Timestamp of the commit"
+                                            }
+                                          }
+                                     }
+                                 }
+                             }
+                         }
+                    },
+                    "400": {
+                        "description": "Invalid Request"
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                         "content": {
+                             "application/json":{
+                                 "schema": {
+                                     "type": "object",
+                                          "properties": {
+                                              "error": {
+                                                  "type": "string",
+                                                  "description": "Error Message"
+                                              }
+                                          }
+                                 }
+                             }
+                         }
+                    }
+                }
+            }
+        },
+       "/historytime": {
+            "get":{
+                "summary": "Get Repository History Time",
+                "description": "Retrieves repository history",
+                "parameters": [
+                    {
+                        "name": "repo_url",
+                        "in": "query",
+                        "required": true,
+                        "description": "Repo URL",
+                        "schema": {
+                          "type": "string"
+                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                         "content": {
+                             "application/json":{
+                                 "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "repo_name": {
+                                          "type": "string",
+                                          "description": "Repo Name"
+                                        },
+                                        "commit_dates": {
+                                            "type": "array",
+                                            "description": "Commits Datess"
+                                        }
+                                    }
+                                 }
+                             }
+                         }
+                    },
+                    "400": {
+                        "description": "Invalid Request"
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                         "content": {
+                             "application/json":{
+                                 "schema": {
+                                     "type": "object",
+                                          "properties": {
+                                              "error": {
+                                                  "type": "string",
+                                                  "description": "Error Message"
+                                              }
+                                          }
+                                 }
+                             }
+                         }
+                    }
+                }
+            }
+        },
+       "/delete_repo/{repo_name}": {
+            "delete":{
+                "summary": "Delete Repository",
+                "description": "Delete a repository entry",
+                "parameters": [
+                    {
+                        "name": "repo_name",
+                        "in": "path",
+                        "required": true,
+                        "description": "Repo to Delete",
+                        "schema": {
+                          "type": "string"
+                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                         "content": {
+                             "application/json":{
+                                 "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                          "type": "string",
+                                          "description": "Message"
+                                        }
+                                    }
+                                 }
+                             }
+                         }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                         "content": {
+                             "application/json":{
+                                 "schema": {
+                                     "type": "object",
+                                          "properties": {
+                                              "error": {
+                                                  "type": "string",
+                                                  "description": "Error Message"
+                                              }
+                                          }
+                                 }
+                             }
+                         }
+                    }
+                }
+            }
+        },
+        "/analyze": {
+            "get":{
+                "summary": "Analyze a Repository",
+                "description": "Analyze a repository",
+                "parameters": [
+                    {
+                        "name": "repo_url",
+                        "in": "query",
+                        "required": true,
+                        "description": "URL to Analyze",
+                        "schema": {
+                          "type": "string"
+                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                         "content": {
+                             "application/json":{
+                                 "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "": {
+                                          "type": "string",
+                                          "description": "TBA"
+                                        }
+                                    }
+                                 }
+                             }
+                         }
+                    },
+                    "400": {
+                        "description": "Invalid Request"
+                    },
+                     "500": {
+                        "description": "Internal server error",
+                         "content": {
+                             "application/json":{
+                                 "schema": {
+                                     "type": "object",
+                                          "properties": {
+                                              "error": {
+                                                  "type": "string",
+                                                  "description": "Error Message"
+                                              }
+                                          }
+                                 }
+                             }
+                         }
+                    }
+                }
+            }
+        },
+        "/analysis_status": {
+            "get":{
+                "summary": "Analysis Status",
+                "description": "Analisis Status",
+                "parameters": [
+                    {
+                        "name": "repo_name",
+                        "in": "query",
+                        "required": true,
+                        "description": "Repo Name",
+                        "schema": {
+                          "type": "string"
+                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                         "content": {
+                             "application/json":{
+                                 "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                          "type": "string",
+                                          "description": "Status"
+                                        }
+                                    }
+                                 }
+                             }
+                         }
+                    },
+                    "400": {
+                        "description": "Invalid Request"
+                    },
+                     "500": {
+                        "description": "Internal server error",
+                         "content": {
+                             "application/json":{
+                                 "schema": {
+                                     "type": "object",
+                                          "properties": {
+                                              "error": {
+                                                  "type": "string",
+                                                  "description": "Error Message"
+                                              }
+                                          }
+                                 }
+                             }
+                         }
+                    }
+                }
+            }
+        },
+        "/analyzedb": {
+            "get":{
+                "summary": "Analyzed DB",
+                "description": "Analyzed DB",
+                "parameters": [
+                    {
+                        "name": "repo_name",
+                        "in": "query",
+                        "required": true,
+                        "description": "repo_name",
+                        "schema": {
+                          "type": "string"
+                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                         "content": {
+                             "application/json":{
+                                 "schema": {
+                                       "type": "array",
+                                        "items": {
+                                         "type": "object",
+                                          "properties": {
+                                            "filename": {
+                                                "type": "string",
+                                                "description": "file name"
+                                              },
+                                              "timestamp": {
+                                                "type": "string",
+                                                "description": "time stamp"
+                                             }
+                                        }
+                                     }
+                                 }
+                             }
+                         }
+                    },
+                    "400": {
+                        "description": "Invalid Request"
+                    },
+                     "500": {
+                        "description": "Internal server error",
+                         "content": {
+                             "application/json":{
+                                 "schema": {
+                                     "type": "object",
+                                          "properties": {
+                                              "error": {
+                                                  "type": "string",
+                                                  "description": "Error Message"
+                                              }
+                                          }
+                                 }
+                             }
+                         }
+                    }
+                }
+            }
+        },
+        "/analyzeall": {
+             "get":{
+                "summary": "All Analysis",
+                "description": "Gets all analysis from the db",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                         "content": {
+                             "application/json":{
+                                 "schema": {
+                                      "type": "array",
+                                        "items": {
+                                         "type": "object",
+                                          "properties": {
+                                            "filename": {
+                                                "type": "string",
+                                                "description": "file name"
+                                              },
+                                              "timestamp": {
+                                                "type": "string",
+                                                "description": "time stamp"
+                                             }
+                                        }
+                                     }
+                                 }
+                             }
+                         }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                         "content": {
+                             "application/json":{
+                                 "schema": {
+                                     "type": "object",
+                                          "properties": {
+                                              "error": {
+                                                  "type": "string",
+                                                  "description": "Error Message"
+                                              }
+                                          }
+                                 }
+                             }
+                         }
+                    }
+                }
+            }
+        }
+  }
+}

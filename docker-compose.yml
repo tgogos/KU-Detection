@@ -36,4 +36,8 @@ services:
 
 volumes:
   ku_detection_postgresql:
+    labels:
+      io.portainer.accesscontrol.teams: skillab-all
   ku_detection_postgresql_data:
+    labels:
+      io.portainer.accesscontrol.teams: skillab-all

@@ -10,6 +10,7 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
 
+
 def get_contributions_from_diffs(commit, diffs):
     contributions = []
 
@@ -31,6 +32,12 @@ def get_contributions_from_diffs(commit, diffs):
 
                 temp_filepath = os.path.join(TEMP_FILES_BASE_PATH, sanitized_filename)
 
+                # Check if the file path is too long
+                if len(temp_filepath) > 250:
+                    logging.warning(f"Skipping file due to long file path: {temp_filepath}")
+                    continue  # Skip processing this file if the path is too long
+
+                # If the file path is acceptable, continue processing
                 content = file_content.data_stream.read()
                 with open(temp_filepath, "wb") as temp_file:
                     temp_file.write(content)
