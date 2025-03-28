@@ -106,7 +106,10 @@ Follow the steps below to set up the backend locally on your machine.
 
 ### With Docker
 
-...
+To run the application and its PostgreSQL database using Docker, ensure Docker and Docker Compose are installed.
+
+Finally, execute `docker-compose up --build` in the project's root directory to build and start the services in containers.
+
 
 ## Technologies
 
