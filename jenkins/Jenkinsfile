@@ -31,10 +31,10 @@ pipeline {
         stage("Unit_Tests"){
             steps {
                 echo "***** Running Unit Tests *****"
-                sh 'docker compose build'
-                sh 'docker compose up -d'
+                sh 'DOCKER_TAG=test docker compose up -d'
                 sh 'sleep 10'
-                sh 'docker compose exec -it ku-detection-backend python -m unittest api.test_routes'
+                sh 'DOCKER_TAG=test docker compose exec -it ku-detection-backend python -m unittest api.test_routes'
+                sh 'DOCKER_TAG=test docker compose down'
             }
         }
 
