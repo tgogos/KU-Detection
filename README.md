@@ -122,3 +122,4 @@ Finally, execute `docker-compose up --build` in the project's root directory to 
 *   python-dotenv
 *   Flask-CORS
 *   Flask-Swagger-UI
+
